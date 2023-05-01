@@ -10,5 +10,7 @@ namespace GameStatusAPI.Interfaces
 
         void AddUserData(string jsonResult, string collectionName);
 
+        List<JObject> GetAllPlayerData(string collectionName);
+
     }
 }

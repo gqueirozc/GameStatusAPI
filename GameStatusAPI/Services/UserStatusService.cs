@@ -144,5 +144,17 @@ namespace GameStatusAPI.Services
             }
             return objectList;
         }
+
+        public List<JObject> GetAllPlayerData(string collectionName)
+        {
+            var list = _baseRepository.Get(collectionName);
+            var objectList = new List<JObject>();
+            foreach (var doc in list)
+            {
+                var jsonWriterSetting = new JsonWriterSettings { OutputMode = JsonOutputMode.Strict };
+                objectList.Add(JObject.Parse(doc.ToJson(jsonWriterSetting)));
+            }
+            return objectList;
+        }
     }
 }

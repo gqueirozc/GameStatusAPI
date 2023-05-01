@@ -47,5 +47,23 @@ namespace GameStatusAPI.Controllers
                 throw new Exception(e.Message);
             }
         }
+
+
+        [Route("GetAllPlayerData")]
+        [HttpGet]
+        public JsonResult GetAllPlayerData()
+        {
+            try
+            {
+                const string collectionName = "UserStatus";
+                var result = _userStatusService.GetAllPlayerData(collectionName);
+
+                return new JsonResult(result);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
     }
 }
