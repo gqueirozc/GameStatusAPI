@@ -16,6 +16,7 @@ namespace GameStatusAPI.Database
             _mongoFinder = mongoFinder;
             _client = client;
         }
+
         public List<BsonDocument> GetPlayerDataByName(string playerName, string collectionName)
         {
             var builder = Builders<BsonDocument>.Filter;

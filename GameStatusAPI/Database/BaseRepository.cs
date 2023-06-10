@@ -23,16 +23,6 @@ namespace GameStatusAPI.Database
             return _mongoFinder.Find(list, new BsonDocument());
         }
 
-        public void Delete(string collection)
-        {
-            var list = _client.GetDatabase(DatabaseName).GetCollection<BsonDocument>(collection);
-            var documents = _mongoFinder.Find(list, new BsonDocument());
-            foreach (var document in documents)
-            {
-                list.DeleteOne(document);
-            }
-        }
-
         public void DeleteEntry(string collectionName, Dictionary<string, object> filterFields)
         {
             var collection = _client.GetDatabase(DatabaseName).GetCollection<BsonDocument>(collectionName);

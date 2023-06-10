@@ -10,11 +10,13 @@ namespace GameStatusAPI.Factories
         [ExcludeFromCodeCoverage]
         public RegularHttpClient(HttpClient httpClient) : base(httpClient)
         {
+
         }
 
         [ExcludeFromCodeCoverage]
         protected override void SetupHeaders()
         {
+
         }
     }
 }

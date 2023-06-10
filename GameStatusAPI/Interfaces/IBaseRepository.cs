@@ -12,12 +12,6 @@ namespace GameStatusAPI.Interfaces
         List<BsonDocument> Get(string collection);
 
         /// <summary>
-        /// delete data from database collection
-        /// </summary>
-        /// <param name="collection">name collection</param>
-        void Delete(string collection);
-
-        /// <summary>
         /// Deletes a single document from the specified collection in the MongoDB database that matches the given filter fields.
         /// </summary>
         /// <param name="collectionName">The name of the collection in the database to delete the document from.</param>

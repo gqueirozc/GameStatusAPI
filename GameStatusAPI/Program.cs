@@ -24,7 +24,6 @@ builder.Services.AddTransient<IMongoClient, MongoClient>(_ => new MongoClient(bu
 builder.Services.AddSingleton<IMongoFinder, MongoFinder>();
 builder.Services.AddSingleton<IUserStatusRepository, UserStatusRepository>();
 
-
 builder.Services.AddControllers();
 builder.Services.Configure<DatabaseSettings>(
     builder.Configuration.GetSection(nameof(MongoDatabaseSettings))

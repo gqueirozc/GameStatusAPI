@@ -35,11 +35,31 @@ namespace GameStatusAPI.Services
             _baseRepository.Insert(collectionName, document);
         }
 
+        public void DeleteUserData(string jsonResult, string collectionName)
+        {
+            var document = BsonDocument.Parse(jsonResult);
+            var collection = _baseRepository.Get(collectionName);
+
+            if (collection.Any(item => item["name"] == document["name"]))
+            {
+                var filterFields = new Dictionary<string, object>
+                {
+                    {"name", document["name"].AsString},
+                };
+                _baseRepository.DeleteEntry(collectionName, filterFields);
+            }
+        }
+
         public async Task<string> GetUserInfo(string userName)
         {
             var playerInfoUrl = $"https://apps.runescape.com/runemetrics/profile/profile?user={userName}&activities=20";
             var response = await _httpClient.GetStringAsync(playerInfoUrl);
             var playerInfo = JObject.Parse(response);
+
+            if (playerInfo["error"]?.ToString() == "PROFILE_PRIVATE")
+            {
+                throw new Exception("The profile is private.");
+            }
 
             return GetFilteredUserData(playerInfo).ToString();
         }
@@ -79,20 +99,29 @@ namespace GameStatusAPI.Services
             };
 
             var levelsArray = new JArray();
-            foreach (var skillValue in userInfo.SelectToken("skillvalues"))
+
+            try
             {
-                var id = skillValue.SelectToken("id")!.Value<int>();
-                skillList.TryGetValue(id, out var value);
-                var levelObject = new JObject
+                foreach (var skillValue in userInfo.SelectToken("skillvalues"))
                 {
-                    ["id"] = skillValue.SelectToken("id"),
-                    ["skillName"] = value,
-                    ["level"] = skillValue.SelectToken("level"),
-                    ["xp"] = skillValue.SelectToken("xp")!.Value<int>() / 10,
-                    ["rank"] = skillValue.SelectToken("rank")
-                };
-                levelsArray.Add(levelObject);
+                    var id = skillValue.SelectToken("id")!.Value<int>();
+                    skillList.TryGetValue(id, out var value);
+                    var levelObject = new JObject
+                    {
+                        ["id"] = skillValue.SelectToken("id"),
+                        ["skillName"] = value,
+                        ["level"] = skillValue.SelectToken("level"),
+                        ["xp"] = skillValue.SelectToken("xp")!.Value<int>() / 10,
+                        ["rank"] = skillValue.SelectToken("rank")
+                    };
+                    levelsArray.Add(levelObject);
+                }
             }
+            catch(Exception e)
+            {
+                Console.WriteLine("Error adding skill values: " + e.Message);
+            }
+       
             return levelsArray;
         }
 
@@ -139,7 +168,7 @@ namespace GameStatusAPI.Services
             var objectList = new List<JObject>();
             foreach (var doc in list)
             {
-                var jsonWriterSetting = new JsonWriterSettings { OutputMode = JsonOutputMode.Strict };
+                var jsonWriterSetting = new JsonWriterSettings { OutputMode = JsonOutputMode.CanonicalExtendedJson };
                 objectList.Add(JObject.Parse(doc.ToJson(jsonWriterSetting)));
             }
             return objectList;
@@ -151,7 +180,7 @@ namespace GameStatusAPI.Services
             var objectList = new List<JObject>();
             foreach (var doc in list)
             {
-                var jsonWriterSetting = new JsonWriterSettings { OutputMode = JsonOutputMode.Strict };
+                var jsonWriterSetting = new JsonWriterSettings { OutputMode = JsonOutputMode.CanonicalExtendedJson };
                 objectList.Add(JObject.Parse(doc.ToJson(jsonWriterSetting)));
             }
             return objectList;

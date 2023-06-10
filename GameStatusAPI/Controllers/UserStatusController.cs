@@ -18,7 +18,7 @@ namespace GameStatusAPI.Controllers
         [Route("InsertUser/{playerName}")]
         [HttpPost]
         public async Task<HttpStatusCode> InsertUser(string playerName)
-        { 
+        {
             try
             {
                 const string collectionName = "UserStatus";
@@ -28,7 +28,42 @@ namespace GameStatusAPI.Controllers
             }
             catch (Exception e)
             {
+                throw new Exception($"{HttpStatusCode.BadRequest} - {e.Message}");
+            }
+        }
+
+        [Route("DeleteUser/{playerName}")]
+        [HttpPost]
+        public async Task<HttpStatusCode> DeleteUser(string playerName)
+        {
+            try
+            {
+                const string collectionName = "UserStatus";
+                var jsonResult = await _userStatusService.GetUserInfo(playerName);
+                _userStatusService.DeleteUserData(jsonResult, collectionName);
+                return HttpStatusCode.OK;
+            }
+            catch (Exception e)
+            {
                 throw new Exception(HttpStatusCode.BadRequest + e.Message);
+            }
+        }
+
+        [Route("UpdateUserInfo/{playerName}")]
+        [HttpPost]
+        public async Task<HttpStatusCode> UpdateUserInfo(string playerName)
+        {
+            try
+            {
+                const string collectionName = "UserStatus";
+                var jsonResult = await _userStatusService.GetUserInfo(playerName);
+                _userStatusService.DeleteUserData(jsonResult, collectionName);
+                _userStatusService.AddUserData(jsonResult, collectionName);
+                return HttpStatusCode.OK;
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"{HttpStatusCode.BadRequest} - {e.Message}");
             }
         }
 
@@ -48,7 +83,6 @@ namespace GameStatusAPI.Controllers
             }
         }
 
-
         [Route("GetAllPlayerData")]
         [HttpGet]
         public JsonResult GetAllPlayerData()
@@ -57,7 +91,6 @@ namespace GameStatusAPI.Controllers
             {
                 const string collectionName = "UserStatus";
                 var result = _userStatusService.GetAllPlayerData(collectionName);
-
                 return new JsonResult(result);
             }
             catch (Exception e)
