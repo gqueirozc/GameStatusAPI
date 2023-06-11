@@ -60,6 +60,10 @@ namespace GameStatusAPI.Services
             {
                 throw new Exception("The profile is private.");
             }
+            else if (playerInfo["error"]?.ToString() == "NO_PROFILE")
+            {
+                throw new Exception("The profile does not exist.");
+            }
 
             return GetFilteredUserData(playerInfo).ToString();
         }
@@ -147,6 +151,7 @@ namespace GameStatusAPI.Services
             var activitiesArray = GetUserActivities(userInfo);
             var filteredJObject = new JObject
             {
+                ["lowercaseName"] = userInfo.SelectToken("name")?.ToString().ToLower(),
                 ["name"] = userInfo.SelectToken("name"),
                 ["rank"] = userInfo.SelectToken("rank"),
                 ["loggedIn"] = userInfo.SelectToken("loggedIn"),

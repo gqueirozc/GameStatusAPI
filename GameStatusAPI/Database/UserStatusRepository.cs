@@ -20,7 +20,7 @@ namespace GameStatusAPI.Database
         public List<BsonDocument> GetPlayerDataByName(string playerName, string collectionName)
         {
             var builder = Builders<BsonDocument>.Filter;
-            var filter = builder.Eq("name", playerName);
+            var filter = builder.Eq("lowercaseName", playerName);
             var collection = _client.GetDatabase(DatabaseName).GetCollection<BsonDocument>(collectionName);
             var list = _mongoFinder.Find(collection, filter);
             return list.ToList();

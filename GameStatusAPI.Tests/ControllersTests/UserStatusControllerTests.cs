@@ -128,7 +128,7 @@ namespace GameStatusAPI.Tests.ControllersTests
         public void GetPlayerData_WhenValidPlayerName_ShouldReturnsJsonResult()
         {
             // Arrange
-            const string playerName = "Guilherme";
+            const string playerName = "guilherme";
             var expectedResult = new List<JObject>
             {
                 new JObject { { "Name", "Guilherme" }, { "Level", 10 } },
@@ -149,7 +149,7 @@ namespace GameStatusAPI.Tests.ControllersTests
         public void GetPlayerData_WhenServiceThrowsException_ShouldThrowsExceptionWithMessage()
         {
             // Arrange
-            const string playerName = "JohnDoe";
+            const string playerName = "guilherme";
             var expectedExceptionMessage = "Some error message";
 
             _userStatusServiceMock

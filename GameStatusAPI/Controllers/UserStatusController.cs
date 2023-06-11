@@ -74,7 +74,7 @@ namespace GameStatusAPI.Controllers
             try
             {
                 const string collectionName = "UserStatus";
-                var result = _userStatusService.GetPlayerDataByName(playerName, collectionName);
+                var result = _userStatusService.GetPlayerDataByName(playerName.ToLower(), collectionName);
                 return new JsonResult(result);
             }
             catch (Exception e)

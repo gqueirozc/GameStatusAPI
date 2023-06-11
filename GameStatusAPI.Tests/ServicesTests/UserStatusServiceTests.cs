@@ -76,6 +76,7 @@ namespace GameStatusAPI.Tests.ServicesTests
             var userName = "Guilherme";
             var expectedUserData = new
             {
+                lowecaseName = "guilherme",
                 name = "Guilherme",
                 rank = 1,
                 loggedIn = true,
@@ -121,7 +122,7 @@ namespace GameStatusAPI.Tests.ServicesTests
             string collectionName = "UserStatus";
             var playerDataList = new List<BsonDocument>()
             {
-                new BsonDocument { { "name", "Guilherme" }, { "score", 100 } },
+                new BsonDocument { { "filteredName", "guilherme" }, { "name", "Guilherme" }, { "score", 100 } },
             };
 
             _userStatusRepositoryMock.Setup(mock => mock.GetPlayerDataByName(playerName, collectionName)).Returns(playerDataList);
@@ -134,6 +135,7 @@ namespace GameStatusAPI.Tests.ServicesTests
             result.Should().HaveCount(1);
 
             var expectedObject = new JObject(
+                new JProperty("filteredName", "guilherme"),
                 new JProperty("name", "Guilherme"),
                 new JProperty("score", new JObject(new JProperty("$numberInt", "100")))
             );
