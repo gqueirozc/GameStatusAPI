@@ -1,6 +1,7 @@
 # GameStatusAPI
 
 APIs that inserts, deletes and updates data on a Mongo DB Collection
+API was made so that the official game API isn't consumed every time to avoid limitation from the host.
 
 MongoDB Info: 
 User email: projetocc1semestre2023uninove@gmail.com
